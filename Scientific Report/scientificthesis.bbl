@@ -1,0 +1,60 @@
+\begin{thebibliography}{10}
+
+\bibitem{andersson-casadi}
+J.~A.~E. Andersson, J.~Gillis, G.~Horn, J.~B. Rawlings, and M.~Diehl.
+\newblock Casadi -- a software framework for nonlinear optimization and optimal
+  control.
+\newblock {\em Mathematical Programming Computation}, 2019.
+
+\bibitem{diamond-boyd-cvxpy}
+S.~Diamond and S.~Boyd.
+\newblock Cvxpy: A python-embedded modeling language for convex optimization.
+\newblock {\em Journal of Machine Learning Research}, 2016.
+
+\bibitem{kaggle-cats-dogs}
+{Kaggle}.
+\newblock Dogs vs. cats.
+\newblock Dataset.
+\newblock URL: \url{https://www.kaggle.com/competitions/dogs-vs-cats/data}.
+
+\bibitem{nocedal-wright}
+J.~Nocedal and S.~J. Wright.
+\newblock {\em Numerical Optimization}.
+\newblock Springer.
+
+\bibitem{rawlings-mayne-mpc}
+J.~B. Rawlings and D.~Q. Mayne.
+\newblock {\em Model Predictive Control: Theory and Design}.
+
+\bibitem{rockafellar-uryasev2000-cvar}
+R.~T. Rockafellar and S.~Uryasev.
+\newblock Optimization of conditional value-at-risk.
+\newblock {\em Journal of Risk}, 2000.
+
+\bibitem{rockafellar-uryasev2002-cvar}
+R.~T. Rockafellar and S.~Uryasev.
+\newblock Conditional value-at-risk for general loss distributions.
+\newblock {\em Journal of Banking \& Finance}, 2002.
+
+\bibitem{shapiro-stochprog}
+A.~Shapiro, D.~Dentcheva, and A.~Ruszczy{\'n}ski.
+\newblock {\em Lectures on Stochastic Programming}.
+\newblock SIAM.
+
+\bibitem{osqp}
+B.~Stellato, G.~Banjac, P.~Goulart, A.~Bemporad, and S.~Boyd.
+\newblock {OSQP}: An operator splitting solver for quadratic programs.
+\newblock {\em Mathematical Programming Computation}, 2020.
+
+\bibitem{vapnik-slt}
+V.~N. Vapnik.
+\newblock {\em Statistical Learning Theory}.
+\newblock Wiley.
+
+\bibitem{wachter-biegler-ipopt}
+A.~W\"achter and L.~T. Biegler.
+\newblock On the implementation of an interior-point filter line-search
+  algorithm for large-scale nonlinear programming.
+\newblock {\em Mathematical Programming}, 2006.
+
+\end{thebibliography}

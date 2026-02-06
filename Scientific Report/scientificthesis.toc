@@ -1,0 +1,25 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Mathematical and Computational Fundamentals}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Risk Measures in Optimization}{2}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Value-at-Risk and Conditional Value-at-Risk}{2}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Scenario Approximation (Sample Average Approximation)}{3}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Numerical Optimization and Software Tools}{4}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Case Study I: Risk-Averse Wobbly Rosenbrock Problem}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Problem Formulation and Uncertainty Model}{5}{section.3.1}%
+\contentsline {section}{\numberline {3.2}CVaR-Based Optimization}{5}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Numerical Experiment Setup}{6}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Numerical Results and Discussion}{7}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Case Study II: Risk-Averse Support Vector Machine}{8}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Problem Description and Motivation}{8}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Nominal SVM Formulation}{8}{section.4.2}%
+\contentsline {section}{\numberline {4.3}CVaR-Based SVM Formulation}{9}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Numerical Experiment Setup}{10}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Dataset and Preprocessing}{10}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Perturbation Model and Reproducibility}{11}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Nominal Training Configuration}{11}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}CVaR Training Configuration}{11}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}Solver and Implementation Details}{11}{subsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.4.6}Evaluation}{12}{subsection.4.4.6}%
+\contentsline {section}{\numberline {4.5}Numerical Results and Discussion}{12}{section.4.5}%
+\contentsline {chapter}{Bibliography}{14}{figure.4.1}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

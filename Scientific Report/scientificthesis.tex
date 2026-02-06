@@ -1,0 +1,533 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Writing a scientific thesis in numerical mathematics
+% Guide for Bachelor's and Master's theses
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Prof. Dr. Volker Schulz, Trier University, 2008, updates 2021 and 2025
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,12pt,titlepage]{scrreprt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ENCODING & LANGUAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[T1]{fontenc}            % T1 font encoding (Umlauts etc.)
+\usepackage[utf8]{inputenc}         % UTF-8 input encoding
+%\usepackage[latin1]{inputenc}      % alternative: Windows
+%\usepackage{ngerman}               % old German package (if needed)
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MATHEMATICS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath, amsfonts, amssymb, amsthm, mathrsfs}
+\usepackage{bbm}                    % blackboard bold (e.g. \mathbbm{1})
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% GRAPHICS & COLORS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}               % includegraphics
+\usepackage{xcolor}                 % color support
+\usepackage{tikz}                   % TikZ graphics
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit}
+\usepackage{pdfpages}
+\usepackage{booktabs}               % nicer tables
+\usepackage{tabularx}
+\newcolumntype{C}{>{\centering\arraybackslash}X} % Centered X column
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FONTS & TEXT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{textcomp, doc}          % extra symbols (e.g. \textdegree)
+\usepackage{cmbright}               % sans-serif font (see tug.dk)
+\usepackage{courier}                % monospaced font
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HYPERLINKS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref}
+%\usepackage{breakurl}              % not needed with pdflatex + hyperref
+\hypersetup{
+    colorlinks = true,
+    linkcolor  = black,
+    citecolor  = black,
+    urlcolor   = blue!80!black
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LAYOUT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\parskip=1ex                        % paragraph spacing
+\parindent=0mm                      % no paragraph indentation
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS & ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{chngcntr}
+\usepackage{tcolorbox}
+\tcbset{colback=white, colframe=red!75!black, fonttitle=\bfseries}
+
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}[definition]{Example}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{algorithm}{Algorithm}
+
+\newenvironment{improve}
+  {\begin{tcolorbox}[title=Suggested Improvement]}
+  {\end{tcolorbox}}
+
+\counterwithout{footnote}{chapter}  % continuous footnote numbering
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HYPHENATION EXCEPTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hyphenation{Po-ly-nom-in-ter-po-la-ti-on}
+\hyphenation{Form-op-ti-mie-rung}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CUSTOM COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\ACS}{2pt}
+\newcommand{\mat}[4]{{\arraycolsep\ACS
+  \left#1\begin{array}{@{}*{#2}{c}@{}}#4\end{array}\right#3}}
+
+\newcommand{\R}{\mathbb{R}}         % real numbers
+\newcommand{\LL}{\mathscr{L}}       % script L
+\newcommand{\glqq}{``}
+\newcommand{\grqq}{''}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage} % Title page
+\begin{center}
+\vspace*{-1cm}
+\includegraphics[width=0.6\textwidth]{LogoN_Uni_Trier.pdf}\\[2em]
+\end{center}
+\phantom{erste Zeile}
+\vspace{0.5cm}
+\begin{center}
+\Huge
+\textbf{RISK AVERSE OPTIMIZATION}\
+\vspace{0.7cm}
+\large
+% In the form of a final thesis \\
+\vspace{2cm}
+RESEARCH CASE STUDY REPORT\\
+\vspace{0.5cm}
+for the degree of \\
+Master of Data Science \\
+\vspace{1cm}
+presented at the Department IV \\
+of Trier University \\
+\vspace{2.5cm}
+submitted by \\
+\vspace{1cm}
+Rahul, Krishnan,\
+Universitätsring 8E, 54296 Trier \\
+\vspace{1cm}
+Supervisor: Prof. Dr. Volker Schulz \\
+\vspace{1cm}
+Trier, \today         % or a specific date
+\end{center}
+\normalsize
+\vfill
+\end{titlepage}
+
+\pagenumbering{roman}
+
+%\begin{center}
+%\large
+%\phantom{erste Zeile}\\
+%\vspace{2.5cm}
+%\textbf{Declaration for the Bachelor's/Master's Thesis$^1$}\\
+%\vspace{0.5cm}
+%\end{center}
+%\normalsize
+%I hereby declare that I have written this Bachelor's/Master's thesis$^1$ independently and that I have not used any other 
+%sources and aids other than those indicated and that the thoughts taken directly or indirectly 
+%% from external sources are marked as such. 
+%directly or indirectly from external sources. The Bachelor's/Master's thesis$^1$
+%has not been submitted to any other examination board in the same or a comparable form. 
+%It nor has it been published elsewhere.
+%
+%\vspace{3cm}
+%
+%\today\\              % or a specific date
+%
+%\smallskip
+%\small\hspace{0cm}(Date) \hspace{8cm} (Signature)
+%\normalsize
+
+\includepdf[pages=-,pagecommand={\thispagestyle{empty}},width=\paperwidth]{Eigenstaendigkeitserklaerung.pdf}
+
+\newpage
+
+\tableofcontents      % Table of contents
+%\listoffigures        % List of figures
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Risk-averse optimization concerns decision problems under uncertainty in which rare but adverse outcomes must be controlled explicitly. In contrast to risk-neutral formulations that minimize expected values, risk-averse approaches account for tail events that can dominate overall performance. This distinction is particularly relevant in numerical optimization and optimal control, where infrequent unfavorable scenarios may lead to severe degradation or failure of the system \cite{shapiro-stochprog}.
+
+A prominent risk measure for capturing tail behavior is the Conditional Value-at-Risk (CVaR). Originally developed in financial mathematics, CVaR is now a standard risk measure and is characterized by a variational formulation due to Rockafellar and Uryasev. This representation expresses CVaR as the solution of an auxiliary optimization problem and establishes its convexity with respect to additional variables, while the full problem may remain nonconvex in the original decision variables \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar}.
+All risk-averse formulations in this report are based on this approach.
+
+Although CVaR is well established in finance, its systematic use in nonlinear optimization and optimal control has gained broader attention only in recent years. From a numerical perspective, CVaR-based problems exhibit a structure that is well suited to scenario-based approximations and modern optimization algorithms, as studied in stochastic programming and numerical optimization literature \cite{shapiro-stochprog,nocedal-wright}.
+
+This report investigates CVaR-based optimization through three case studies of increasing complexity, motivated by the T2 Mathematics module on risk-averse optimization. The first case study considers a risk-averse wobbly Rosenbrock problem as a minimal example under parametric uncertainty. The second case study addresses a risk-averse support vector machine, illustrating CVaR in a high-dimensional convex learning problem with noisy data \cite{vapnik-slt}. The third and most involved case study focuses on risk-averse model predictive control for wine fermentation, where uncertainty in ambient temperature can lead to severe process failures if tail risks are ignored \cite{rawlings-mayne-mpc}.
+
+The objective of this work is to study the numerical implementation of CVaR-based formulations using scenario approximations and contemporary optimization software, and to assess their behavior in comparison to risk-neutral approaches. Emphasis is placed on reproducibility, solver performance, and the trade-off between robustness and computational effort.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Mathematical and Computational Fundamentals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This chapter introduces the mathematical concepts and numerical tools required for the formulation and solution of the risk-averse optimization problems considered in this report. The presentation is intentionally restricted to material that is used directly in the subsequent case studies, in accordance with standard guidelines for scientific theses in numerical mathematics.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Risk Measures in Optimization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a probability space and let
+$L : X \times \Omega \to \mathbb{R}$ denote a loss function depending on a decision variable $x\in X\subset\mathbb{R}^n$ and a random variable $\xi\in\Omega$.
+
+The classical risk-neutral optimization problem minimizes the expected loss
+\begin{equation}
+\min_{x\in X}\; \mathbb{E}\bigl[L(x,\xi)\bigr].
+\end{equation}
+While this formulation is mathematically convenient, it does not distinguish between moderate and extreme losses. Rare but severe events may therefore be underrepresented, which can lead to solutions with poor robustness properties in practice \cite{shapiro-stochprog}.
+
+To address this limitation, risk measures are introduced. A risk measure is a functional
+\begin{equation}
+\rho : L^p(\Omega) \to \mathbb{R}
+\end{equation}
+that assigns a scalar risk value to a random loss. Important examples include the expectation, the variance, the Value-at-Risk (VaR), and the Conditional Value-at-Risk (CVaR). Among these, CVaR plays a central role in this work due to its favorable analytical and numerical properties.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Value-at-Risk and Conditional Value-at-Risk}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+For a given confidence level $\alpha\in(0,1)$, the Value-at-Risk of a loss random variable $Z$ is defined as
+\begin{equation}
+\mathrm{VaR}_\alpha(Z) := \inf\bigl\{t\in\mathbb{R}\,\big|\,\mathbb{P}(Z\le t)\ge \alpha\bigr\}.
+\end{equation}
+VaR characterizes a quantile of the loss distribution but provides no information about the magnitude of losses beyond this threshold. Moreover, VaR is in general nonconvex and noncoherent, which limits its usefulness in optimization problems.
+
+The Conditional Value-at-Risk (CVaR) remedies these shortcomings by averaging losses in the tail of the distribution:
+\begin{equation}
+\mathrm{CVaR}_\alpha(Z) := \mathbb{E}\bigl[Z\,\big|\, Z \ge \mathrm{VaR}_\alpha(Z)\bigr].
+\end{equation}
+CVaR is a coherent risk measure and explicitly penalizes extreme outcomes. Its key advantage for optimization lies in the variational representation introduced by Rockafellar and Uryasev \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar}:
+\begin{equation}
+\mathrm{CVaR}_\alpha(Z)
+=
+\min_{t\in\mathbb{R}}\left\{t + \frac{1}{1-\alpha}\,\mathbb{E}\bigl[(Z-t)_+\bigr]\right\},
+\end{equation}
+where $(\cdot)_+ := \max\{0,\cdot\}$.
+This formulation transforms CVaR minimization into a standard optimization problem with auxiliary variables. The resulting objective is convex in the risk-related variables, even if the original loss function is nonconvex in the decision variable $x$. All CVaR-based formulations in this report rely on this representation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scenario Approximation (Sample Average Approximation)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In practical applications, the distribution of $\xi$ is rarely available in closed form. Expectations are therefore approximated using Monte Carlo sampling. Given $N$ independent samples $\{\xi^{(i)}\}_{i=1}^N$, the expectation term in the CVaR formulation is replaced by a sample average, yielding the Sample Average Approximation (SAA):
+\begin{equation}
+\min_{x,t}\; t + \frac{1}{(1-\alpha)N}\sum_{i=1}^N \bigl(L(x,\xi^{(i)})-t\bigr)_+.
+\end{equation}
+
+Introducing auxiliary variables $u_i\ge 0$ leads to an equivalent finite-dimensional constrained optimization problem:
+\begin{align}
+\min_{x,t,u}\;& t + \frac{1}{(1-\alpha)N}\sum_{i=1}^N u_i,\\
+\text{s.t. }\;& u_i \ge L(x,\xi^{(i)})-t,\quad i=1,\dots,N,\\
+& u_i \ge 0,\quad i=1,\dots,N,\\
+& x\in X.
+\end{align}
+Under mild assumptions, solutions of the SAA problem converge to solutions of the original stochastic problem as $N\to\infty$ \cite{shapiro-stochprog}. This approach forms the numerical backbone of all case studies considered in this work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Optimization and Software Tools}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The optimization problems arising from CVaR formulations take the form of nonlinear programs (NLPs) or quadratic programs (QPs), depending on the structure of the underlying loss function. In the static optimization and optimal control case studies, NLPs are solved using interior-point methods, while convex learning problems lead to large-scale QPs \cite{nocedal-wright}.
+
+For nonlinear problems, the implementations rely on CasADi, which provides symbolic expressions, automatic differentiation, and seamless interfaces to NLP solvers such as IPOPT \cite{andersson-casadi,wachter-biegler-ipopt}. Convex quadratic problems are formulated using CVXPY \cite{diamond-boyd-cvxpy} and solved with operator-splitting methods.
+
+The numerical behavior of these solvers, including robustness, convergence properties, and computational cost, is an integral part of the analysis in the subsequent chapters.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Case Study I: Risk-Averse Wobbly Rosenbrock Problem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problem Formulation and Uncertainty Model}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+As a minimal yet illustrative example of risk-averse optimization, we consider a perturbed version of the classical Rosenbrock function \cite{rosenbrock1960}. The deterministic Rosenbrock function with parameters $a\in\mathbb{R}$ and $b>0$ is defined as
+\begin{equation}
+\phi(x;a,b) = (a-x_1)^2 + b\,(x_2-x_1^2)^2,\qquad x=(x_1,x_2)^\top.
+\end{equation}
+For the standard choice $a=1$ and $b=100$, the function has a unique global minimizer at $x^\star=(1,1)$.
+
+Uncertainty is introduced through additive noise in the parameter $a$,
+\begin{equation}
+  a(\xi_a) = a + \xi_a,
+\end{equation}
+which leads to the random loss
+\begin{equation}
+  f(x,\xi_a) = \phi\bigl(x; a+\xi_a, b\bigr).
+\end{equation}
+This setting models parametric uncertainty, where the decision variable itself is deterministic but the system parameters are subject to random perturbations. 
+
+The decision variable is constrained to the compact feasible set
+\begin{equation}
+  X=[-2,2]^2,
+\end{equation}
+ensuring boundedness of the optimization problem.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CVaR-Based Optimization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+For a confidence level $\alpha\in(0,1)$, the objective is to minimize the Conditional Value-at-Risk of the random loss,
+\begin{equation}
+  \min_{x\in X}\; \mathrm{CVaR}_\alpha\bigl[f(x,\xi_a)\bigr].
+\end{equation}
+
+Using the Rockafellar--Uryasev variational representation, CVaR can be written as \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar}
+\begin{equation}
+\mathrm{CVaR}_\alpha[f] = \min_{t\in\mathbb{R}}\left\{t + \frac{1}{1-\alpha}\,\mathbb{E}\bigl[(f-t)_+\bigr]\right\},
+\end{equation}
+where $t$ represents the Value-at-Risk threshold and $(\cdot)_+=\max\{0,\cdot\}$. This formulation transforms the risk-averse problem into a standard constrained optimization problem that is convex in the auxiliary variables but generally nonconvex in $x$.
+
+Since the expectation cannot be evaluated analytically, a Sample Average Approximation (SAA) is employed \cite{shapiro-stochprog}. Given $N$ independent samples $\{\xi_a^{(i)}\}_{i=1}^N$, the finite-dimensional problem becomes
+\begin{align}
+\min_{x,t,u}\;& t + \frac{1}{(1-\alpha)N}\sum_{i=1}^N u_i,\\
+\text{s.t. }\;& u_i \ge \phi\bigl(x; a+\xi_a^{(i)}, b\bigr)-t,\quad i=1,\dots,N,\\
+& u_i \ge 0,\quad i=1,\dots,N,\\
+& x\in X.
+\end{align}
+Despite the nonconvexity in $x$, the problem is small-scale and can be solved reliably using standard NLP solvers (here via CasADi/IPOPT) \cite{andersson-casadi,wachter-biegler-ipopt}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Experiment Setup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+All experiments in this chapter are conducted with $b=100$ and a CVaR confidence level of $\alpha=0.99$, placing strong emphasis on tail risk. The CVaR optimization problem is solved using $N=500$ training scenarios generated via SAA. The resulting solutions are evaluated out-of-sample using $M=5000$ independent realizations of the parameter noise.
+
+Two different noise models for the parameter perturbation $\xi_a$ are considered:
+\begin{itemize}
+  \item Standard normal distributed noise, representing light-tailed uncertainty.
+  \item Student's $t$-distributed noise, representing heavy-tailed uncertainty with rare extreme events.
+\end{itemize}
+
+For each noise model, two solutions are compared:
+\begin{itemize}
+  \item a nominal solution, obtained by minimizing the deterministic Rosenbrock function,
+  \item a CVaR-optimized solution, obtained from the SAA-based CVaR formulation.
+\end{itemize}
+
+Performance is assessed using the out-of-sample mean loss and the empirical $\mathrm{CVaR}_{0.99}$, computed as the mean of the worst $1\%$ of observed losses.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Results and Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The numerical results of the wobbly Rosenbrock experiment are summarized in Table~\ref{tab:wobbly-rosenbrock}, which reports out-of-sample performance for both the nominal and CVaR-optimized solutions under standard normal distributed and Student's $t$-distributed parameter noise. Performance is evaluated using the empirical mean loss and the empirical $\mathrm{CVaR}_{0.99}$, computed from $M=5000$ independent test samples.
+
+\begin{table}[ht]
+\centering
+\caption{Out-of-sample performance for the wobbly Rosenbrock problem ($\alpha=0.99$, $N=500$, $M=5000$).}
+\label{tab:wobbly-rosenbrock}
+\begin{tabular}{llcccc}
+\toprule
+Noise distribution & Solution & $x_1$ & $x_2$ & Mean loss & $\mathrm{CVaR}_{0.99}$\\
+\midrule
+Standard normal distributed & Nominal & 1.000 & 1.000 & 0.002417 & 0.020196\\
+Standard normal distributed & CVaR    & 0.997 & 0.993 & 0.002417 & 0.019941\\
+Student's $t$ & Nominal & 1.000 & 1.000 & 0.007048 & 0.237490\\
+Student's $t$ & CVaR    & 0.950 & 0.903 & 0.009584 & 0.234932\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under standard normal distributed parameter noise, the CVaR-optimized solution exhibits essentially the same mean loss as the nominal solution, while achieving a small but consistent reduction in $\mathrm{CVaR}_{0.99}$. As shown in Table~\ref{tab:wobbly-rosenbrock}, the CVaR value decreases from 0.020196 for the nominal solution to 0.019941 for the CVaR-optimized solution, without any noticeable degradation in average performance. This indicates that, for light-tailed uncertainty, the deterministic minimizer of the Rosenbrock function is already close to optimal, and CVaR optimization provides only marginal improvements in tail risk.
+
+The effect of CVaR optimization becomes more pronounced under heavy-tailed Student's $t$-distributed noise. In this case, the nominal solution exhibits larger tail losses, resulting in a $\mathrm{CVaR}_{0.99}$ of 0.237490. The CVaR-optimized solution reduces this value to 0.234932, at the cost of an increased mean loss. This behavior reflects the defining characteristic of risk-averse optimization: the solution is adjusted to suppress rare but severe outcomes, even when this leads to inferior average performance. The corresponding shift of the optimizer away from the deterministic minimizer illustrates how CVaR explicitly responds to heavy-tailed uncertainty by prioritizing tail behavior over typical realizations.
+
+Taken together, these results confirm the central insight of this case study. Risk-averse optimization via CVaR does not universally outperform risk-neutral optimization. When uncertainty is light-tailed and the nominal optimum is inherently robust, CVaR yields only minor gains. In contrast, when uncertainty exhibits heavy tails and extreme events dominate the loss distribution, CVaR provides a clear and systematic mechanism for controlling tail risk, even at the expense of increased mean loss. This observation motivates the subsequent case studies, where uncertainty and catastrophic failure modes play a more decisive role.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Case Study II: Risk-Averse Support Vector Machine}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problem Description and Motivation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This case study investigates risk-averse optimization in a high-dimensional machine learning setting. Unlike the Rosenbrock example, where uncertainty affects a low-dimensional parametric objective, here uncertainty enters through perturbations of the input data itself. Such perturbations can lead to localized but severe degradation in classification performance, particularly for image-based tasks.
+
+Support Vector Machines (SVMs) are a standard method for binary classification and are typically trained by minimizing the average hinge loss \cite{vapnik-slt}. This risk-neutral approach focuses on mean performance and does not explicitly control the impact of rare but unfavorable perturbations. The objective of this case study is to examine whether minimizing the Conditional Value-at-Risk (CVaR) of the hinge loss using the Rockafellar--Uryasev formulation \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar} leads to classifiers that are more robust to noisy inputs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nominal SVM Formulation}\label{sec:svm-nominal}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+For a labeled dataset $\{(x_i,y_i)\}_{i=1}^n$, the standard linear SVM is commonly introduced by minimizing the hinge loss
+\begin{equation}
+\max\bigl(0,\,1-y_i(w^\top x_i-b)\bigr),
+\end{equation}
+leading to the risk-neutral optimization problem
+\begin{equation}
+\min_{w,b}\; \frac{1}{n}\sum_{i=1}^n \max\bigl(0,\,1-y_i(w^\top x_i-b)\bigr) + \lambda\lVert w\rVert_2^2.
+\end{equation}
+
+The hinge loss is convex but non-differentiable due to the pointwise maximum. In order to obtain a formulation suitable for quadratic programming solvers, this objective is rewritten using slack variables $\zeta_i$, yielding the equivalent primal soft-margin SVM formulation \cite{vapnik-slt}:
+\begin{align}
+\min_{w,b,\zeta}\;& \frac{1}{n}\sum_{i=1}^n \zeta_i + \lambda\lVert w\rVert_2^2,\\
+\text{s.t. }\;& y_i(w^\top x_i-b) \ge 1-\zeta_i,\quad i=1,\dots,n,\\
+& \zeta_i \ge 0,\quad i=1,\dots,n.
+\end{align}
+This reformulation replaces the non-smooth max operator with linear constraints and auxiliary variables, while preserving convexity. The resulting problem has a quadratic objective and linear constraints and therefore constitutes a convex quadratic program (QP). This is the formulation used in the numerical implementation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CVaR-Based SVM Formulation}\label{sec:svm-cvar}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+To incorporate robustness against input perturbations, the SVM training objective is extended from a risk-neutral to a risk-averse formulation using the Conditional Value-at-Risk (CVaR) \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar}. Uncertainty is modeled through additive perturbations of the input data. For each original training sample $x_i$, multiple perturbed versions are generated,
+\begin{equation}
+  x_i^{(k)} = x_i + \delta_i^{(k)},\qquad k=1,\dots,N,
+\end{equation}
+where each index $k$ corresponds to one perturbation scenario of the entire dataset.
+
+For a fixed classifier $(w,b)$, the hinge loss in scenario $k$ is computed using the slack-variable formulation introduced in Section~\ref{sec:svm-nominal}. Let $\zeta_i^{(k)}$ denote the slack variable associated with sample $i$ in scenario $k$. The average hinge loss for scenario $k$ is then given by
+\begin{equation}
+  \ell^{(k)}(w,b) = \frac{1}{n}\sum_{i=1}^n \zeta_i^{(k)}.
+\end{equation}
+
+The risk-averse training objective minimizes the CVaR of the scenario-dependent loss distribution $\{\ell^{(k)}\}_{k=1}^N$. Using the Rockafellar--Uryasev representation, CVaR can be written as
+\begin{equation}
+  \mathrm{CVaR}_\alpha[\ell] = \min_{t\in\mathbb{R}}\left\{t + \frac{1}{1-\alpha}\,\mathbb{E}\bigl[(\ell-t)_+\bigr]\right\},
+\end{equation}
+where $\alpha\in(0,1)$ is the confidence level and $t$ represents the Value-at-Risk threshold.
+
+Approximating the expectation by a sample average over $N$ perturbation scenarios (SAA) \cite{shapiro-stochprog} yields the finite-dimensional optimization problem
+\begin{align}
+\min_{w,b,\zeta,t,u}\;& \lambda\lVert w\rVert_2^2 + t + \frac{1}{(1-\alpha)N}\sum_{k=1}^N u_k,\\
+\text{s.t. }\;& y_i\bigl(w^\top x_i^{(k)}-b\bigr) \ge 1-\zeta_i^{(k)},\quad \forall i,\,k,\\
+& \zeta_i^{(k)} \ge 0,\quad \forall i,\,k,\\
+& u_k \ge \ell^{(k)}(w,b) - t,\quad k=1,\dots,N,\\
+& u_k \ge 0,\quad k=1,\dots,N.
+\end{align}
+
+This formulation introduces auxiliary variables $\zeta_i^{(k)}$ to handle the non-smooth hinge loss and variables $t$ and $u_k$ to aggregate losses in the upper tail of the distribution. Importantly, all constraints are linear, and the objective function consists of a quadratic regularization term and linear terms in the auxiliary variables. As a result, the CVaR-based SVM formulation remains a convex quadratic program (QP) \cite{vapnik-slt}.
+
+In contrast to the Rosenbrock case study, where nonconvexity arises from the objective function itself, both the nominal and CVaR-based SVM problems are convex and can be solved efficiently using standard QP solvers. This convex structure allows robustness against input perturbations to be achieved without sacrificing computational tractability.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Experiment Setup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This section describes the experimental configuration used to evaluate the nominal and CVaR-optimized SVM classifiers. The objective is to ensure transparency, reproducibility, and a fair comparison between risk-neutral and risk-averse training.
+
+\subsection{Dataset and Preprocessing}
+
+The experiments are conducted on a binary image classification task (cats versus dogs) \cite{kaggle-cats-dogs}. Due to system and computational constraints, the dataset is restricted to a balanced subset of 100 images in total, consisting of an equal number of cat and dog images. This subset is sufficient to demonstrate the effect of risk-averse training while keeping the computational cost of scenario-based CVaR optimization manageable.
+
+All images are resized to a fixed resolution, converted to grayscale, flattened into feature vectors, and normalized. The dataset is split into disjoint training and test sets of equal size.
+
+
+
+\subsection{Perturbation Model and Reproducibility}
+
+Input uncertainty is introduced through additive noise applied to the image pixels. Two perturbation models are considered:
+
+\begin{itemize}
+  \item Standard normal perturbations, representing light-tailed uncertainty.
+  \item Student’s $t$-distributed perturbations with df=2, representing heavy-tailed uncertainty.
+\end{itemize}
+
+Perturbations are applied independently to each pixel. For both training and evaluation, the same perturbation realizations are used for the nominal and CVaR-based classifiers. This ensures that any observed performance differences are attributable solely to the training objective and not to differences in noise realizations.
+
+All perturbations are generated using a fixed random seed. This guarantees full reproducibility of the experiments and allows for a direct, controlled comparison between the nominal and CVaR-optimized solutions.
+
+\subsection{Nominal Training Configuration}
+
+The nominal SVM is trained using the primal soft-margin formulation described in Section~\ref{sec:svm-nominal}. The regularization parameter $\lambda$ is fixed throughout all experiments. Training is performed on the unperturbed training data, corresponding to a standard risk-neutral classifier.
+
+\subsection{CVaR Training Configuration}
+
+For CVaR-based training, robustness is enforced at the level of the loss distribution rather than at individual samples. The CVaR confidence level is fixed to $\alpha = 0.95$, corresponding to optimization with respect to the worst $5\%$ of perturbation scenarios.
+
+During training, $N = $ independent perturbation scenarios of the entire training dataset are generated. For each scenario, the average hinge loss is computed using the slack-variable formulation. These scenario losses are aggregated using the CVaR objective, resulting in the convex quadratic program described in Section~\ref{sec:svm-cvar} \cite{rockafellar-uryasev2000-cvar,rockafellar-uryasev2002-cvar,shapiro-stochprog}.
+
+\subsection{Solver and Implementation Details}
+
+All optimization problems in this case study are implemented in CVXPY \cite{diamond-boyd-cvxpy} and solved using the OSQP solver \cite{osqp}. The nominal SVM and the CVaR-based SVM are both formulated as convex quadratic programs (QPs), consisting of a quadratic objective and linear constraints, as described in Sections 4.2 and 4.3.  Solver tolerances are explicitly specified, with absolute and relative convergence tolerances set to $10^{-5}$, and a maximum iteration limit of 10 000 to ensure convergence in all runs.
+
+\subsection{Evaluation}
+
+Classifier performance is evaluated using three complementary metrics:
+
+\begin{enumerate}
+  \item Unperturbed test accuracy, measured on clean test data.
+  \item Mean perturbed test accuracy, averaged over $M = 100$ independently perturbed test sets.
+  \item CVaR$_{0.95}$ perturbed test accuracy, capturing worst-case performance under severe perturbations.
+\end{enumerate}
+
+In addition, the mean hinge loss and CVaR$_{0.95}$ hinge loss are computed over the perturbed test sets to directly assess tail behavior in the loss distribution.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Results and Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section presents and interprets the numerical performance of the nominal and CVaR-optimized SVM classifiers under both light-tailed and heavy-tailed input perturbations. All experiments are conducted using the configuration: $\text{Dimension} = 64$, $\lambda = 10^{-3}$, $\alpha = 0.95$, $N = 10$, $M = 100$, and $\sigma = 0.8$, with grayscale images and a balanced dataset consisting of 100 cat and 100 dog images \cite{kaggle-cats-dogs}. Identical perturbation realizations are used for both classifiers to ensure a fair comparison.
+
+\begin{table}[ht]
+\centering
+\caption{SVM performance under input perturbations ($\alpha=0.95$, $N=10$, $M=100$).}
+\label{tab:svm-performance}
+\small % Reduces font size slightly to help fit the table
+\begin{tabularx}{\textwidth}{llCCCCC}
+\toprule
+Perturbation type & Model & Mean hinge loss & $\text{CVaR}_{0.95}$ loss & Acc. (unpert.) & Acc. (mean) & Acc. ($\text{CVaR}_{0.95}$) \\
+\midrule
+Std. normal & Nominal & 1.048 & 1.115 & 53.0\% & 51.89\% & 47.29\% \\
+Std. normal & CVaR SVM & \textbf{0.978} & \textbf{1.029} & \textbf{58.0\%} & \textbf{54.53\%} & \textbf{49.29\%} \\
+Student’s $t$ & Nominal & 1.064 & 1.160 & 53.0\% & 51.49\% & 45.71\% \\
+Student’s $t$ & CVaR SVM & \textbf{0.958} & \textbf{1.033} & \textbf{57.0\%} & \textbf{54.86\%} & \textbf{48.22\%} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Table~\ref{tab:svm-performance} provides a detailed comparison between the nominal and $\text{CVaR}$-optimized SVM classifiers under both standard normal and Student’s $t$-distributed input perturbations. The reported metrics allow performance to be assessed not only in terms of average behavior but also with respect to tail risk, which is the primary focus of $\text{CVaR}$-based optimization.
+
+Under standard normal perturbations, the nominal SVM exhibits a noticeable gap between mean perturbed accuracy (51.89\%) and $\text{CVaR}_{0.95}$ accuracy (47.29\%), indicating sensitivity to unfavorable noise realizations. This behavior is also reflected in the hinge loss statistics: while the mean hinge loss remains moderate, the $\text{CVaR}_{0.95}$ hinge loss increases, revealing the presence of high-loss tail events. The $\text{CVaR}$-optimized SVM improves performance across all reported metrics in this regime. As shown in Table~\ref{tab:svm-performance}, both the mean and $\text{CVaR}_{0.95}$ hinge losses are reduced, and classification accuracy increases not only in the worst-case tail but also on average and on the unperturbed test set. This suggests that $\text{CVaR}$ training suppresses extreme-loss scenarios without sacrificing baseline performance. In fact, the improvement in unperturbed accuracy indicates that the risk-neutral classifier may overfit noise-sensitive directions in the feature space, while the $\text{CVaR}$ objective acts as an implicit regularizer. Some sample images where the CVaR svm classifies correctly while the nominal svm misclassifies is shown in Figure~\ref{fig:my_image}.
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/misclassified.png}
+    \caption{2 sample images from the test set where nominal solution misclassified and CVaR solution classified correctly}
+    \label{fig:my_image}
+\end{figure}
+
+
+The advantages of $\text{CVaR}$-based training become more pronounced under Student’s $t$-distributed perturbations, which introduce heavy-tailed noise and rare but severe distortions. In this setting, the nominal SVM shows a substantial degradation in tail performance, with a $\text{CVaR}_{0.95}$ hinge loss of 1.160 and a $\text{CVaR}_{0.95}$ accuracy of only 45.71\%, despite a mean perturbed accuracy close to 51\%. This discrepancy highlights that extreme perturbations dominate worst-case behavior even when average performance appears acceptable. The $\text{CVaR}$-optimized SVM significantly mitigates this effect. As reported in Table~\ref{tab:svm-performance}, both the mean and $\text{CVaR}_{0.95}$ hinge losses are reduced, and the $\text{CVaR}_{0.95}$ accuracy improves by more than two percentage points. Importantly, these robustness gains are not achieved at the expense of overall predictive quality, as unperturbed and mean perturbed accuracies also increase.
+
+Across both perturbation models, a consistent pattern emerges. The nominal SVM is vulnerable to tail events, as evidenced by the systematic drop from mean perturbed accuracy to $\text{CVaR}_{0.95}$ accuracy. In contrast, the $\text{CVaR}$-optimized SVM reduces tail hinge loss and improves worst-case accuracy in all cases considered. The magnitude of this improvement is modest under light-tailed noise but becomes clearly visible under heavy-tailed perturbations, which aligns with the theoretical motivation of $\text{CVaR}$. These results contrast with the Rosenbrock case study, where the nominal solution was already relatively robust under light-tailed uncertainty. In the high-dimensional SVM setting, localized pixel-level perturbations can strongly influence classifier decisions, making tail-aware optimization substantially more effective.
+
+Overall, the results summarized in Table~\ref{tab:svm-performance} demonstrate that $\text{CVaR}$-based SVM training provides a meaningful robustness advantage in the presence of input noise, particularly when uncertainty exhibits heavy tails, while preserving or even improving average-case performance.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainurl}
+\bibliography{wa}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+

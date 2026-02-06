@@ -13,3 +13,5 @@
 
 # Include .gitignore itself
 !.gitignore
+!/Scientific Report/
+!Scientific Report/**
