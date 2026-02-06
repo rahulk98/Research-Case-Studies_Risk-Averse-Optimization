@@ -1,0 +1,15 @@
+# Ignore everything
+*
+
+# Except these directories
+!/Case Study 1 - Wobbly Rosenbrock/
+!Case Study 1 - Wobbly Rosenbrock/**
+
+!/Case Study 2 - SVM on Perturbed Cats vs Dogs/
+!Case Study 2 - SVM on Perturbed Cats vs Dogs/**
+
+!/Case Study 3 - Risk Averse Optimal Control for Wine Fermentation/
+!Case Study 3 - Risk Averse Optimal Control for Wine Fermentation/**
+
+# Include .gitignore itself
+!.gitignore
