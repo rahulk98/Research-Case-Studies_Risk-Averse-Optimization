@@ -22,7 +22,7 @@ def svm_loss_func(x, y, w, b):
 
 
 def load_images(dimension=64, load_in_gray=True, max_per_class=None):
-    path = "train/train"
+    path = "train"
     images = []
     labels = []
     class_counts = {'cat': 0, 'dog': 0}
@@ -58,8 +58,8 @@ def preprocess_image_loading(img, target_size=(64,64), to_gray=True):
     img = img.resize(target_size)
     img_array = np.array(img).flatten() / 255.0  # Normalize pixel values
     return img_array
-    
-    
+
+
 def solve_svm_nominal(x, y, lambda_reg):
     n, d = x.shape
     w = cp.Variable(d)
@@ -227,6 +227,6 @@ def main():
         print("Comparison (Test Set): CVaR@alpha=%.2f" % args.alpha)
         print("  CVaR(cvar)  vs  CVaR(nominal)  -->  %.6f  vs  %.6f" % (cvar_cvar, cvar_nom))
         print("  Mean(cvar)  vs  Mean(nominal)  -->  %.6f  vs  %.6f" % (mean_cvar, mean_nom))
-        
+
 if __name__ == "__main__":
     main()
