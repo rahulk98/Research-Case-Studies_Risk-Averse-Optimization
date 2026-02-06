@@ -473,7 +473,7 @@ def main():
             x_train_noisy[k, :, :] = x_train + rng.normal(
                 0, args.sigma, size=x_train.shape
             )
-
+        rng = np.random.default_rng(args.seed + 1)
         x_test_noisy = np.zeros((args.M, x_test.shape[0], x_test.shape[1]))
         for k in range(args.M):
             x_test_noisy[k, :, :] = x_test + rng.normal(
@@ -486,7 +486,7 @@ def main():
             x_train_noisy[k, :, :] = (
                 x_train + rng.standard_t(df=3, size=x_train.shape) * args.sigma
             )
-
+        rng = np.random.default_rng(args.seed + 1)
         x_test_noisy = np.zeros((args.M, x_test.shape[0], x_test.shape[1]))
         for k in range(args.M):
             x_test_noisy[k, :, :] = (
