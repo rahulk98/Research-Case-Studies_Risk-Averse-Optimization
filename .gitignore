@@ -13,5 +13,7 @@
 
 # Include .gitignore itself
 !.gitignore
+!.gitattributes
+!README.md
 !/Scientific Report/
 !Scientific Report/**
